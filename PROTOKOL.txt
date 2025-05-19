@@ -1,0 +1,67 @@
+FILE SERVER
+TUJUAN: Melayani client dalam melakukan berbagai operasi terhadap file di server
+
+ATURAN PROTOKOL:
+- Client harus mengirimkan request dalam bentuk string
+- String harus dalam format:
+  REQUEST spasi PARAMETER
+- PARAMETER dapat terdiri dari satu atau lebih bagian, dipisahkan oleh spasi atau delimiter khusus
+- Semua response dikirim dalam format JSON dan diakhiri dengan karakter ASCII: #13#10#13#10 (yaitu "\r\n\r\n")
+
+DAFTAR REQUEST YANG DILAYANI:
+
+1. LIST
+* TUJUAN: Mendapatkan daftar seluruh file yang tersedia di server
+* PARAMETER: tidak ada
+* RESPONSE:
+  - BERHASIL:
+    - status: OK
+    - data: list file
+  - GAGAL:
+    - status: ERROR
+    - data: pesan kesalahan
+
+2. GET
+* TUJUAN: Mengambil isi file dari server
+* PARAMETER:
+  - PARAMETER1: nama file
+* RESPONSE:
+  - BERHASIL:
+    - status: OK
+    - data_namafile: nama file
+    - data_file: isi file dalam bentuk base64
+  - GAGAL:
+    - status: ERROR
+    - data: pesan kesalahan
+
+3. DELETE
+* TUJUAN: Menghapus file tertentu dari server
+* PARAMETER:
+  - PARAMETER1: nama file
+* RESPONSE:
+  - BERHASIL:
+    - status: OK
+    - data: "file <nama_file> berhasil dihapus"
+  - GAGAL:
+    - status: ERROR
+    - data: pesan kesalahan
+
+4. UPLOAD
+* TUJUAN: Mengunggah file dari client ke server
+* PARAMETER:
+  - PARAMETER1: nama file
+  - PARAMETER2: isi file dalam bentuk base64 (dipisahkan dengan tanda "|")
+* FORMAT:
+  - Format string: `UPLOAD <nama_file>|<data_base64>`
+* RESPONSE:
+  - BERHASIL:
+    - status: OK
+    - data: "file <nama_file> berhasil diupload"
+  - GAGAL:
+    - status: ERROR
+    - data: pesan kesalahan
+
+INFORMASI TAMBAHAN:
+- Jika request tidak dikenali akan menghasilkan:
+  - status: ERROR
+  - data: request tidak dikenali
